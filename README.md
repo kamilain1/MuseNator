@@ -8,7 +8,7 @@
 - Music Generation
 
 ## Details:
-- We will implement model based on Base GPT-2 small which will we responsible for music generation, given initial set of notes. Notes will contain following information: pitch of the sound,  time interval in which the note is played.
+- We will implement model based on Base GPT-2 small which will we responsible for music generation, given initial set of notes. Notes will contain following information: pitch of the sound,  time interval in which the note is played, jump between previous and current note, volume level.
 
 ## Dataset:
 Probably NSynth Dataset consisting of 305,979 musical notes
