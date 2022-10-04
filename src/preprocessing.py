@@ -1,6 +1,5 @@
 import mido
 import numpy as np
-import matplotlib.pyplot as plt
 
 NUMBER_OF_PIANO_NOTES = 88
 
@@ -24,7 +23,7 @@ def get_msg_info(msg):
 
 def switch_note(last_state, note, velocity, on=True):
     if last_state is None:
-        notes = np.zeros(88)
+        notes = np.zeros(NUMBER_OF_PIANO_NOTES)
     else:
         notes = last_state.copy()
     if note in range(21, 109):
@@ -41,10 +40,10 @@ def get_new_state(new_msg, last_state):
     return [new_state, new_msg['time']]
 
 
-def track2seq(track):
+def get_sequence(track):
     result = []
     # first note
-    last_state, last_time = get_new_state(str(track[0]), [0] * NUMBER_OF_PIANO_NOTES)
+    last_state, last_time = get_new_state(track[0], [0] * NUMBER_OF_PIANO_NOTES)
     # iterating through notes
     for i in range(1, len(track)):
         new_state, new_time = get_new_state(track[i], last_state)
@@ -54,17 +53,17 @@ def track2seq(track):
     return result
 
 
-def mid2array(midi, threshold=0.1):
+def get_piano_roll(midi, threshold=0.1):
     min_n_msg = np.max([len(tr) for tr in midi.tracks]) * threshold
     # convert tracks to sequences
     sequences = []
     for index, track in enumerate(midi.tracks):
         if len(track) > min_n_msg:
-            sequences.append(track2seq(track))
+            sequences.append(get_sequence(track))
     # make all sequences to the same length
     max_len = np.max([len(sequence) for sequence in sequences])
     for index, sequence in enumerate(sequences):
-        if sequence < max_len:
+        if len(sequence) < max_len:
             sequences[index] += [[0] * NUMBER_OF_PIANO_NOTES] * (max_len - len(sequence))
     sequences = np.array(sequences)
     sequences = np.max(np.array(sequences), axis=0)
@@ -76,9 +75,6 @@ def mid2array(midi, threshold=0.1):
 
 if __name__ == '__main__':
     mid = mido.MidiFile(datapath, clip=True)
-    result_array = mid2array(mid)
+    result_array = get_piano_roll(mid)
 
-    plt.plot(range(result_array.shape[0]), np.multiply(np.where(result_array > 0, 1, 0), range(1, 89)), marker='.',
-             markersize=1, linestyle='')
-    plt.title("nocturne_27_2_(c)inoue.mid")
-    plt.show()
+    print(result_array)
