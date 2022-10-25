@@ -1,7 +1,6 @@
 import mido
 import numpy as np
-
-NUMBER_OF_PIANO_NOTES = 88
+from const import NUMBER_OF_PIANO_NOTES
 
 datapath = "../dataset/A., Jag, Je t'aime Juliette, OXC7Fd0ZN8o.mid"
 

@@ -22,3 +22,8 @@ Our expectation is a following pipeline:
 - Method which maps output sequence of symbolic notes into actual media file in supported audio formats.
 
 Crucial point in overall evaluation will be a subjective assessment of generated audio files by humans (our team). Our general expectation is to have a model, able to generate music that is enjoyable to listen to. The most important factor for us is to get harmonious, coherent music without abrupt sound transitions.
+
+
+## Result from preprocessing
+
+![alt text](presentation/image_2022-10-04_20-19-30.png)
