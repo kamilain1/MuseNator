@@ -1,6 +1,7 @@
 import mido
 import numpy as np
 from const import NUMBER_OF_PIANO_NOTES
+from pretty_midi import PrettyMIDI
 
 datapath = "../dataset/A., Jag, Je t'aime Juliette, OXC7Fd0ZN8o.mid"
 
@@ -70,6 +71,10 @@ def get_piano_roll(midi, threshold=0.1):
     sums = np.sum(sequences, axis=1)
     ends = np.where(sums > 0)[0]
     return sequences[np.min(ends): np.max(ends)]
+
+
+def get_piano_roll_from_path(midi_file_name: str, fs: int = 20):
+    return PrettyMIDI(midi_file_name).get_piano_roll(fs=fs)
 
 
 if __name__ == '__main__':
