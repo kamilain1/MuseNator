@@ -1,38 +1,38 @@
 import os
 import numpy as np
-from src.const import NUMBER_OF_PIANO_NOTES, SELECTED_FS, SEQ_LENGTH
+from const import NUMBER_OF_PIANO_NOTES, SELECTED_FS, SEQ_LENGTH
 from pretty_midi import PrettyMIDI
 import pretty_midi
 import random
+import torch
 from time import time
 from tqdm import tqdm
 
-datapath = "../dataset/A., Jag, Je t'aime Juliette, OXC7Fd0ZN8o.mid"
 
-
-def get_train_filenames():
-    directory = "../dataset"
+def get_filenames(directory):
     filenames = []
     for filename in os.listdir(directory):
         f = os.path.join(directory, filename)
         if os.path.isfile(f):
             filenames.append(f)
-
     return filenames
 
 
 def generate_roll(batch):
-    results = []
+    batch_inputs = []
+    batch_targets = []
     for mid_filename in batch:
         mid = PrettyMIDI(mid_filename)
         result_array = mid.get_piano_roll(fs=SELECTED_FS)[:NUMBER_OF_PIANO_NOTES]
         song_length = result_array.shape[1]
         start_time = random.randint(0, song_length - SEQ_LENGTH - 2)
-        train_sequence = result_array[:, start_time:(start_time + SEQ_LENGTH)]
+        input_sequence = result_array[:, start_time:(start_time + SEQ_LENGTH)]
         target_sequence = result_array[:, (start_time + SEQ_LENGTH + 1)]
 
-        results.append((train_sequence, target_sequence))
-    return results
+        batch_inputs.append(torch.tensor(input_sequence, dtype=torch.float32))
+        batch_targets.append(torch.tensor(target_sequence, dtype=torch.float32))
+
+    return batch_inputs, batch_targets
 
 
 def piano_roll_to_pretty_midi(piano_roll, fs=SELECTED_FS, program=0):
