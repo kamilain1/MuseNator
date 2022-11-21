@@ -1,8 +1,6 @@
 import os
-import random
-import mido
 import numpy as np
-from const import NUMBER_OF_PIANO_NOTES, SELECTED_FS, SEQ_LENGTH, BATCH_SIZE
+from src.const import NUMBER_OF_PIANO_NOTES, SELECTED_FS, SEQ_LENGTH
 from pretty_midi import PrettyMIDI
 import pretty_midi
 import random
