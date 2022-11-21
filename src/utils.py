@@ -4,6 +4,8 @@ from src.const import NUMBER_OF_PIANO_NOTES, SELECTED_FS, SEQ_LENGTH
 from pretty_midi import PrettyMIDI
 import pretty_midi
 import random
+from time import time
+from tqdm import tqdm
 
 datapath = "../dataset/A., Jag, Je t'aime Juliette, OXC7Fd0ZN8o.mid"
 
@@ -66,3 +68,34 @@ def piano_roll_to_pretty_midi(piano_roll, fs=SELECTED_FS, program=0):
             prev_velocities[note] = 0
     pm.instruments.append(instrument)
     return pm
+
+
+def save_few_rolls():
+    filenames = get_train_filenames()
+    results = {}
+    for index, filename in enumerate(tqdm(filenames)):
+        try:
+            mid = PrettyMIDI(filename)
+            result_array = mid.get_piano_roll(fs=SELECTED_FS)[:NUMBER_OF_PIANO_NOTES]
+            results[str(index)] = result_array
+        except Exception as e:
+            print(e)
+        if index != 0 and index % 1000 == 0:
+            save_roll(
+                array_map=results,
+                path=f"rolls_{index // 1000}"
+            )
+            results = {}
+    if len(results.keys()) != 0:
+        save_roll(
+            array_map=results,
+            path=f"rolls_last"
+        )
+
+
+def load_roll(path="rolls.npz"):
+    return np.load(path)
+
+
+def save_roll(array_map, path="rolls"):
+    np.savez_compressed(path, **array_map)
