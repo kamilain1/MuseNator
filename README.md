@@ -11,7 +11,7 @@
 - We implemented model based on LSTM which is able to generate music, given initial set of notes. Notes contain following information: pitch of the sound and volume level.
 
 ## Dataset:
-Our expected primary dataset will be GiantMIDI-Piano, which contains 10,854 classical piano pieces represented in MIDI format.
+Our expected primary dataset is Maestro dataset, which contains over 1000 classical piano pieces represented in MIDI format.
 
 
 ## Expecting results:
