@@ -14,7 +14,7 @@
 Our expected primary dataset is Maestro dataset, which contains over 1000 classical piano pieces represented in MIDI format.
 
 
-## Expecting results:
+## Expected results:
 Our expectation is a following pipeline:
 
 - Preprocessor, which converts input data in MIDI format into text embeddings
